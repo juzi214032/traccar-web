@@ -7,6 +7,7 @@ import {
   formatBoolean,
   formatCoordinate,
   formatCourse,
+  formatAccuracy,
   formatDistance,
   formatNumber,
   formatNumericHours,
@@ -68,6 +69,8 @@ const PositionValue = ({ position, property, attribute }) => {
         return formatAlarm(value, t);
       default:
         switch (positionAttributes[key]?.dataType) {
+          case 'accuracy':
+            return formatAccuracy(value, t);
           case 'speed':
             return formatSpeed(value, speedUnit, t);
           case 'distance':

@@ -82,6 +82,9 @@ export const formatCourse = (value) => {
   return courseValues[Math.floor(normalizedValue / 45)];
 };
 
+export const formatAccuracy = (value, t) =>
+  `${formatNumber(value, 1)} ${t('sharedMeters')}`;
+
 export const formatDistance = (value, unit, t) =>
   `${distanceFromMeters(value, unit).toFixed(2)} ${distanceUnitString(unit, t)}`;
 

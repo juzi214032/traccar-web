@@ -37,7 +37,7 @@ export default (t) =>
       accuracy: {
         name: t('positionAccuracy'),
         type: 'number',
-        dataType: 'distance',
+        dataType: 'accuracy',
         property: true,
       },
       valid: {
