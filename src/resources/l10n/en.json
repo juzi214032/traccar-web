@@ -584,6 +584,8 @@
     "notificatorPushover": "Pushover",
     "notificatorWhatsapp": "WhatsApp",
     "reportReplay": "Replay",
+    "replayMinSpeed": "Min Speed (m/s)",
+    "replayMaxSpeed": "Max Speed (m/s)",
     "reportCombined": "Combined",
     "reportPositions": "Positions",
     "reportEvents": "Events",

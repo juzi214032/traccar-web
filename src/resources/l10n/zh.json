@@ -584,6 +584,8 @@
     "notificatorPushover": "Pushover",
     "notificatorWhatsapp": "沃茨阿普",
     "reportReplay": "轨迹回放",
+    "replayMinSpeed": "速度下限 (米/秒)",
+    "replayMaxSpeed": "速度上限 (米/秒)",
     "reportCombined": "组合",
     "reportPositions": "位置",
     "reportEvents": "事件",

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { IconButton, Paper, Slider, Toolbar, Typography } from '@mui/material';
+import { IconButton, Paper, Slider, TextField, Toolbar, Typography } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
 import TuneIcon from '@mui/icons-material/Tune';
 import DownloadIcon from '@mui/icons-material/Download';
@@ -15,6 +15,7 @@ import MapRoutePoints from '../map/MapRoutePoints';
 import MapPositions from '../map/MapPositions';
 import { formatTime } from '../common/util/formatter';
 import ReportFilter from '../reports/components/ReportFilter';
+import useReportStyles from '../reports/common/useReportStyles';
 import { useTranslation } from '../common/components/LocalizationProvider';
 import { useCatchCallback } from '../reactHelper';
 import MapCamera from '../map/MapCamera';
@@ -77,6 +78,7 @@ const useStyles = makeStyles()((theme) => ({
 const ReplayPage = () => {
   const t = useTranslation();
   const { classes } = useStyles();
+  const { classes: reportClasses } = useReportStyles();
   const navigate = useNavigate();
   const timerRef = useRef();
 
@@ -88,6 +90,8 @@ const ReplayPage = () => {
   const [index, setIndex] = useState(0);
   const [selectedDeviceId, setSelectedDeviceId] = useState(defaultDeviceId);
   const [showCard, setShowCard] = useState(false);
+  const [minSpeed, setMinSpeed] = useState('');
+  const [maxSpeed, setMaxSpeed] = useState('');
   const from = searchParams.get('from');
   const to = searchParams.get('to');
   const [playing, setPlaying] = useState(false);
@@ -151,6 +155,12 @@ const ReplayPage = () => {
       setLoading(true);
       setSelectedDeviceId(deviceId);
       const query = new URLSearchParams({ deviceId, from, to });
+      if (minSpeed !== '') {
+        query.append('minSpeed', Number(minSpeed) / 0.514444);
+      }
+      if (maxSpeed !== '') {
+        query.append('maxSpeed', Number(maxSpeed) / 0.514444);
+      }
       try {
         const response = await fetchOrThrow(`/api/positions?${query.toString()}`);
         setIndex(0);
@@ -164,7 +174,7 @@ const ReplayPage = () => {
         setLoading(false);
       }
     },
-    [t],
+    [t, minSpeed, maxSpeed],
   );
 
   const handleDownload = () => {
@@ -251,7 +261,26 @@ const ReplayPage = () => {
             </>
           )}
           <div style={{ display: loaded && !filterOpen ? 'none' : 'block' }}>
-            <ReportFilter onShow={onShow} deviceType="single" loading={loading} />
+            <ReportFilter onShow={onShow} deviceType="single" loading={loading}>
+              <div className={reportClasses.filterItem}>
+                <TextField
+                  type="number"
+                  value={minSpeed}
+                  onChange={(e) => setMinSpeed(e.target.value)}
+                  label={t('replayMinSpeed')}
+                  fullWidth
+                />
+              </div>
+              <div className={reportClasses.filterItem}>
+                <TextField
+                  type="number"
+                  value={maxSpeed}
+                  onChange={(e) => setMaxSpeed(e.target.value)}
+                  label={t('replayMaxSpeed')}
+                  fullWidth
+                />
+              </div>
+            </ReportFilter>
           </div>
         </Paper>
       </div>
