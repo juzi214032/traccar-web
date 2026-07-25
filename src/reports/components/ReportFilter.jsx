@@ -141,7 +141,12 @@ const ReportFilter = ({ children, onShow, onExport, onSchedule, deviceType, load
     const newParams = new URLSearchParams(searchParams);
     newParams.set('from', selectedFrom.toISOString());
     newParams.set('to', selectedTo.toISOString());
-    setSearchParams(newParams, { replace: true });
+    if (newParams.get('from') === from && newParams.get('to') === to) {
+      // URL 参数没有变化时 effect 不会触发，直接发起查询
+      onShow({ deviceIds: deviceIds.filter((it) => it !== 'all'), groupIds, from, to });
+    } else {
+      setSearchParams(newParams, { replace: true });
+    }
   };
 
   const onSelected = (type) => {

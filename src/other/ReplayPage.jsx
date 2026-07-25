@@ -92,6 +92,11 @@ const ReplayPage = () => {
   const [showCard, setShowCard] = useState(false);
   const [minSpeed, setMinSpeed] = useState('');
   const [maxSpeed, setMaxSpeed] = useState('');
+  // onShow 通过 ref 读取速度值，保持引用稳定，避免输入过程中触发自动查询
+  const minSpeedRef = useRef('');
+  const maxSpeedRef = useRef('');
+  minSpeedRef.current = minSpeed;
+  maxSpeedRef.current = maxSpeed;
   const from = searchParams.get('from');
   const to = searchParams.get('to');
   const [playing, setPlaying] = useState(false);
@@ -155,11 +160,11 @@ const ReplayPage = () => {
       setLoading(true);
       setSelectedDeviceId(deviceId);
       const query = new URLSearchParams({ deviceId, from, to });
-      if (minSpeed !== '') {
-        query.append('minSpeed', Number(minSpeed) / 0.514444);
+      if (minSpeedRef.current !== '') {
+        query.append('minSpeed', Number(minSpeedRef.current) / 0.514444);
       }
-      if (maxSpeed !== '') {
-        query.append('maxSpeed', Number(maxSpeed) / 0.514444);
+      if (maxSpeedRef.current !== '') {
+        query.append('maxSpeed', Number(maxSpeedRef.current) / 0.514444);
       }
       try {
         const response = await fetchOrThrow(`/api/positions?${query.toString()}`);
@@ -174,7 +179,7 @@ const ReplayPage = () => {
         setLoading(false);
       }
     },
-    [t, minSpeed, maxSpeed],
+    [t],
   );
 
   const handleDownload = () => {
